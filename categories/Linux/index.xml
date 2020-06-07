@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux on The Day</title>
+    <link>https://m-ouse.github.io/categories/Linux/</link>
+    <description>Recent content in Linux on The Day</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Tue, 26 May 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://m-ouse.github.io/categories/Linux/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>x64汇编传参规则</title>
+      <link>https://m-ouse.github.io/post/x64%E6%B1%87%E7%BC%96%E4%BC%A0%E5%8F%82%E8%A7%84%E5%88%99/</link>
+      <pubDate>Tue, 26 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://m-ouse.github.io/post/x64%E6%B1%87%E7%BC%96%E4%BC%A0%E5%8F%82%E8%A7%84%E5%88%99/</guid>
+      <description>&lt;p&gt;64位汇编&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>解决gcc -m32报错fatal error syscdefs.h No such file or directory</title>
+      <link>https://m-ouse.github.io/post/%E8%A7%A3%E5%86%B3gcc-m32%E6%8A%A5%E9%94%99fatal-error-syscdefs.h-No-such-file-or-directory/</link>
+      <pubDate>Thu, 30 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://m-ouse.github.io/post/%E8%A7%A3%E5%86%B3gcc-m32%E6%8A%A5%E9%94%99fatal-error-syscdefs.h-No-such-file-or-directory/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>rm命令的一些操作</title>
+      <link>https://m-ouse.github.io/post/rm%E5%91%BD%E4%BB%A4%E7%9A%84%E4%B8%80%E4%BA%9B%E6%93%8D%E4%BD%9C/</link>
+      <pubDate>Sat, 25 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://m-ouse.github.io/post/rm%E5%91%BD%E4%BB%A4%E7%9A%84%E4%B8%80%E4%BA%9B%E6%93%8D%E4%BD%9C/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>proxychains配置</title>
+      <link>https://m-ouse.github.io/post/proxychains%E9%85%8D%E7%BD%AE/</link>
+      <pubDate>Fri, 24 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://m-ouse.github.io/post/proxychains%E9%85%8D%E7%BD%AE/</guid>
+      <description>&lt;p&gt;由于国内git的速度实在是令人无法忍受，和其他一些终端的操作需要代理，配置了一波proxychains解决以上问题。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Linux C几个调试宏</title>
+      <link>https://m-ouse.github.io/post/Linux-C%E5%87%A0%E4%B8%AA%E8%B0%83%E8%AF%95%E5%AE%8F/</link>
+      <pubDate>Tue, 17 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://m-ouse.github.io/post/Linux-C%E5%87%A0%E4%B8%AA%E8%B0%83%E8%AF%95%E5%AE%8F/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>GCC编译中几种保护打开和关闭的参数</title>
+      <link>https://m-ouse.github.io/post/GCC%E7%BC%96%E8%AF%91%E4%B8%AD%E5%87%A0%E7%A7%8D%E4%BF%9D%E6%8A%A4%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E7%9A%84%E5%8F%82%E6%95%B0/</link>
+      <pubDate>Sat, 09 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://m-ouse.github.io/post/GCC%E7%BC%96%E8%AF%91%E4%B8%AD%E5%87%A0%E7%A7%8D%E4%BF%9D%E6%8A%A4%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E7%9A%84%E5%8F%82%E6%95%B0/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

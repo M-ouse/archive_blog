@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>pwn on The Day</title>
+    <link>https://m-ouse.github.io/categories/pwn/</link>
+    <description>Recent content in pwn on The Day</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Fri, 07 Feb 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://m-ouse.github.io/categories/pwn/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>cisc_2019_c_1</title>
+      <link>https://m-ouse.github.io/post/cisc_2019_c_1/</link>
+      <pubDate>Fri, 07 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://m-ouse.github.io/post/cisc_2019_c_1/</guid>
+      <description>&lt;p&gt;入门Pwn的一道题，利用了构造ROP链和泄露libc地址getshell，对于新手来说比较全面，简单记录一下&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>CTF中关于Pwn类型题目加载目标libc的方法</title>
+      <link>https://m-ouse.github.io/post/CTF%E4%B8%AD%E5%85%B3%E4%BA%8EPwn%E7%B1%BB%E5%9E%8B%E9%A2%98%E7%9B%AE%E5%8A%A0%E8%BD%BD%E7%9B%AE%E6%A0%87libc%E7%9A%84%E6%96%B9%E6%B3%95/</link>
+      <pubDate>Thu, 06 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://m-ouse.github.io/post/CTF%E4%B8%AD%E5%85%B3%E4%BA%8EPwn%E7%B1%BB%E5%9E%8B%E9%A2%98%E7%9B%AE%E5%8A%A0%E8%BD%BD%E7%9B%AE%E6%A0%87libc%E7%9A%84%E6%96%B9%E6%B3%95/</guid>
+      <description>&lt;p&gt;做pwn有的时候需要加载题目给的libc让程序跑，不然payload是对的远程依旧打不穿&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

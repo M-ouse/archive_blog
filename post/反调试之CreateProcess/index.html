@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>反调试之CreateProcess - The Day</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="2st" /><meta name="description" content="NULL" /><meta name="keywords" content="Mac, Github, Vue, React, Front End" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.72.0 with theme even" />
+
+
+<link rel="canonical" href="https://m-ouse.github.io/post/%E5%8F%8D%E8%B0%83%E8%AF%95%E4%B9%8BCreateProcess/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<link href="/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/reset-even.css">
+
+
+<meta property="og:title" content="反调试之CreateProcess" />
+<meta property="og:description" content="NULL" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://m-ouse.github.io/post/%E5%8F%8D%E8%B0%83%E8%AF%95%E4%B9%8BCreateProcess/" />
+<meta property="article:published_time" content="2020-02-14T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-02-14T00:00:00+00:00" />
+<meta itemprop="name" content="反调试之CreateProcess">
+<meta itemprop="description" content="NULL">
+<meta itemprop="datePublished" content="2020-02-14T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2020-02-14T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1476">
+
+
+
+<meta itemprop="keywords" content="reverse,programming,antidebug," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="反调试之CreateProcess"/>
+<meta name="twitter:description" content="NULL"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">The Day</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archieves</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a><a href="/friends/">
+        <li class="mobile-menu-item">Friends</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">The Day</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archieves</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/friends/">Friends</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">反调试之CreateProcess</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-02-14 00:00 </span>
+        <div class="post-category">
+            <a href="/categories/Windows/"> Windows </a>
+            </div>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#0x1-实现反调试的思路">0x1 实现反调试的思路</a></li>
+        <li><a href="#0x2-实验">0x2 实验</a></li>
+        <li><a href="#0x3最后附上startupinfo结构体的信息">0x3最后附上STARTUPINFO结构体的信息</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h3 id="0x1-实现反调试的思路">0x1 实现反调试的思路</h3>
+<p>主角API</p>
+<blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">GetStartupInfo</span> <span class="p">(</span><span class="nx">STARTUPINFO</span><span class="p">)</span>  <span class="nx">使用此API可以在进程启动的时候获取启动信息结构体</span>
+</code></pre></td></tr></table>
+</div>
+</div></blockquote>
+<p>　　1.我们的程序中调用Getstartupinfo API来获取启动时的启动信息。</p>
+<p>　　2.判断启动信息结构体的值，是否是我们预期的，如果非预期则调用 ExitProcess结束进程。</p>
+<p>　　3.如果是调试器启动我们的程序.那么启动信息结构体的信息肯定是不同的。</p>
+<h3 id="0x2-实验">0x2 实验</h3>
+<p>先呈上代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;Windows.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">STARTUPINFO</span> <span class="n">si</span><span class="p">;</span>
+    <span class="n">si</span><span class="p">.</span><span class="n">cb</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">si</span><span class="p">);</span><span class="c1">//包含STARTUPINFO结构中的字节数.如果Microsoft将来扩展该结构,它可用作版本控制手段.应用程序必须将cb初始化为sizeof(STARTUPINFO)
+</span><span class="c1"></span>
+    <span class="n">GetStartupInfo</span><span class="p">(</span><span class="o">&amp;</span><span class="n">si</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">si</span><span class="p">.</span><span class="n">dwFlags</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">printf</span><span class="p">(</span><span class="s">&#34;si.dwFlags:%lu</span><span class="se">\r\n</span><span class="s">&#34;</span><span class="p">,</span><span class="n">si</span><span class="p">.</span><span class="n">dwFlags</span><span class="p">);</span>
+      <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Debugger found!</span><span class="se">\r\n</span><span class="s">&#34;</span><span class="p">);</span>
+      <span class="n">ExitProcess</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;si.dwFlags:%lu</span><span class="se">\r\n</span><span class="s">&#34;</span><span class="p">,</span><span class="n">si</span><span class="p">.</span><span class="n">dwFlags</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Debugger not found!</span><span class="se">\r\n</span><span class="s">&#34;</span><span class="p">);</span>
+    <span class="n">system</span><span class="p">(</span><span class="s">&#34;pause&#34;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>调试器启动：</p>
+<p><img src="http://23.91.100.118:8080/images/2020/02/12/2020-02-12_221136.png" alt=""></p>
+<p>桌面管理器启动：</p>
+<p><img src="http://23.91.100.118:8080/images/2020/02/12/2020-02-12_221412.png" alt=""></p>
+<h3 id="0x3最后附上startupinfo结构体的信息">0x3最后附上STARTUPINFO结构体的信息</h3>
+<p><a href="https://blog.csdn.net/whynottrythis/article/details/39828395">来源</a></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_STARTUPINFO</span> 
+<span class="p">{</span> 
+	<span class="n">DWORD</span> <span class="n">cb</span><span class="p">;</span>			 	 <span class="c1">//包含STARTUPINFO结构中的字节数.如果Microsoft将来扩展该结构,它可用作版本控制手段.应用程序必须将cb初始化为sizeof(STARTUPINFO) 
+</span><span class="c1"></span>    <span class="n">PSTR</span> <span class="n">lpReserved</span><span class="p">;</span>		 <span class="c1">//保留。必须初始化为NULL
+</span><span class="c1"></span>    <span class="n">PSTR</span> <span class="n">lpDesktop</span><span class="p">;</span>			 <span class="c1">//用于标识启动应用程序所在的桌面的名字。如果该桌面存在，新进程便与指定的桌面相关联。如果桌面不存在，便创建一个带有默认属性的桌面，并使用为新进程指定的名字。如果lpDesktop是NULL（这是最常见的情况 ),那么该进程将与当前桌面相关联 
+</span><span class="c1"></span>    <span class="n">PSTR</span> <span class="n">lpTitle</span><span class="p">;</span>			 <span class="c1">//用于设定控制台窗口的名称。如果lpTitle是NULL，则可执行文件的名字将用作窗口名.This parameter must be NULL for GUI or console processes that do not create a new console window.
+</span><span class="c1"></span>    <span class="n">DWORD</span> <span class="n">dwX</span><span class="p">;</span>				 <span class="c1">//用于设定应用程序窗口相对屏幕左上角位置的x 坐标（以像素为单位）。 
+</span><span class="c1"></span>    <span class="n">DWORD</span> <span class="n">dwY</span><span class="p">;</span>				 <span class="c1">//对于GUI processes用CW_USEDEFAULT作为CreateWindow的x、y参数，创建它的第一个重叠窗口。若是创建控制台窗口的应用程序，这些成员用于指明相对控制台窗口的左上角的位置
+</span><span class="c1"></span>    <span class="n">DWORD</span> <span class="n">dwXSize</span><span class="p">;</span>			 <span class="c1">//用于设定应用程序窗口的宽度（以像素为单位）
+</span><span class="c1"></span>    <span class="n">DWORD</span> <span class="n">dwYSize</span><span class="p">;</span>			 <span class="c1">//子进程将CW_USEDEFAULT 用作CreateWindow 的nWidth、nHeight参数来创建它的第一个重叠窗口。若是创建控制台窗口的应用程序，这些成员将用于指明控制台窗口的宽度 
+</span><span class="c1"></span>    <span class="n">DWORD</span> <span class="n">dwXCountChars</span><span class="p">;</span>	 <span class="c1">//用于设定子应用程序的控制台窗口的宽度（屏幕显示的字节列）和高度（字节行）（以字符为单位） 
+</span><span class="c1"></span>    <span class="n">DWORD</span> <span class="n">dwYCountChars</span><span class="p">;</span> 
+    <span class="n">DWORD</span> <span class="n">dwFillAttribute</span><span class="p">;</span>   <span class="c1">//用于设定子应用程序的控制台窗口使用的文本和背景颜色 
+</span><span class="c1"></span>    <span class="n">DWORD</span> <span class="n">dwFlags</span><span class="p">;</span>           <span class="c1">//请参见下一段和表4-7 的说明 
+</span><span class="c1"></span>    <span class="n">WORD</span> <span class="n">wShowWindow</span><span class="p">;</span>        <span class="c1">//用于设定如果子应用程序初次调用的ShowWindow 将SW_*作为nCmdShow 参数传递时，该应用程序的第一个重叠窗口应该如何出现。本成员可以是通常用于ShowWindow 函数的任何一个SW_*标识符，除了SW_SHOWDEFAULT. 
+</span><span class="c1"></span>    <span class="n">WORD</span> <span class="n">cbReserved2</span><span class="p">;</span>        <span class="c1">//保留。必须被初始化为0 
+</span><span class="c1"></span>    <span class="n">PBYTE</span> <span class="n">lpReserved2</span><span class="p">;</span>       <span class="c1">//保留。必须被初始化为NULL
+</span><span class="c1"></span>    <span class="n">HANDLE</span> <span class="n">hStdInput</span><span class="p">;</span>        <span class="c1">//用于设定供控制台输入和输出用的缓存的句柄。按照默认设置，hStdInput 用于标识键盘缓存，hStdOutput 和hStdError用于标识控制台窗口的缓存 
+</span><span class="c1"></span>    <span class="n">HANDLE</span> <span class="n">hStdOutput</span><span class="p">;</span> 
+    <span class="n">HANDLE</span> <span class="n">hStdError</span><span class="p">;</span> 
+<span class="p">}</span> <span class="n">STARTUPINFO</span><span class="p">,</span> <span class="o">*</span><span class="n">LPSTARTUPINFO</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>表4-7 dwFlags 使用标志及含义</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="n">STARTF_USESIZE</span>						<span class="c1">//使用dwXSize 和dwYSize 成员 
+</span><span class="c1"></span><span class="n">STARTF_USESHOWWINDOW</span>				<span class="c1">//使用wShowWindow 成员 
+</span><span class="c1"></span><span class="n">STARTF_USEPOSITION</span>					<span class="c1">//使用dwX 和dwY 成员 
+</span><span class="c1"></span><span class="n">STARTF_USECOUNTCHARS</span>                <span class="c1">//使用dwXCountChars 和dwYCount Chars 成员 
+</span><span class="c1"></span><span class="n">STARTF_USEFILLATTRIBUTE</span>				<span class="c1">//使用dwFillAttribute 成员 
+</span><span class="c1"></span><span class="n">STARTF_USESTDHANDLES</span>				<span class="c1">//使用hStdInput 、hStdOutput 和hStdError 成员 
+</span><span class="c1"></span><span class="n">STARTF_RUN_FULLSCREEN</span>				<span class="c1">//强制在x86 计算机上运行的控制台应用程序以全屏幕方式启动运行
+</span></code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">2st</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-02-14 00:00
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a target="_blank" rel="license noopener" href="https://github.com/nusr/blog/blob/master/LICENSE">MIT</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/reverse/">reverse</a>
+          <a href="/tags/programming/">programming</a>
+          <a href="/tags/antidebug/">antidebug</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E5%8F%8D%E8%B0%83%E8%AF%95%E4%B9%8BPEB/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">反调试之PEB</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/dll%E6%B3%A8%E5%85%A5/">
+            <span class="next-text nav-default">dll注入</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:jupmouse@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/M-ouse" class="iconfont icon-github" title="github"></a>
+  <a href="https://m-ouse.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">2st</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-138883536-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

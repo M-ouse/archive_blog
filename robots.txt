@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://m-ouse.github.io/sitemap.xml

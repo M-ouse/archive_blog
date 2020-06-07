@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>tools on The Day</title>
+    <link>https://m-ouse.github.io/tags/tools/</link>
+    <description>Recent content in tools on The Day</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Fri, 24 Jan 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://m-ouse.github.io/tags/tools/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>proxychains配置</title>
+      <link>https://m-ouse.github.io/post/proxychains%E9%85%8D%E7%BD%AE/</link>
+      <pubDate>Fri, 24 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://m-ouse.github.io/post/proxychains%E9%85%8D%E7%BD%AE/</guid>
+      <description>&lt;p&gt;由于国内git的速度实在是令人无法忍受，和其他一些终端的操作需要代理，配置了一波proxychains解决以上问题。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
