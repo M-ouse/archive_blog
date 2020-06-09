@@ -30,6 +30,13 @@
   </url>
   
   <url>
+    <loc>https://m-ouse.github.io/</loc>
+    <lastmod>2020-06-08T17:57:27+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://m-ouse.github.io/tags/kernel/</loc>
     <lastmod>2020-06-08T17:57:27+08:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -52,13 +59,6 @@
   
   <url>
     <loc>https://m-ouse.github.io/tags/</loc>
-    <lastmod>2020-06-08T17:57:27+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://m-ouse.github.io/</loc>
     <lastmod>2020-06-08T17:57:27+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
