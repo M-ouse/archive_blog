@@ -23,6 +23,13 @@
   </url>
   
   <url>
+    <loc>https://m-ouse.github.io/categories/ctf/</loc>
+    <lastmod>2020-06-10T09:59:41+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://m-ouse.github.io/</loc>
     <lastmod>2020-06-10T09:59:41+08:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -37,14 +44,7 @@
   </url>
   
   <url>
-    <loc>https://m-ouse.github.io/categories/pwn/</loc>
-    <lastmod>2020-06-10T09:59:41+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://m-ouse.github.io/tags/rop/</loc>
+    <loc>https://m-ouse.github.io/tags/re/</loc>
     <lastmod>2020-06-10T09:59:41+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -213,6 +213,20 @@
   
   <url>
     <loc>https://m-ouse.github.io/post/cisc_2019_c_1/</loc>
+    <lastmod>2020-02-07T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://m-ouse.github.io/categories/pwn/</loc>
+    <lastmod>2020-02-07T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://m-ouse.github.io/tags/rop/</loc>
     <lastmod>2020-02-07T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
