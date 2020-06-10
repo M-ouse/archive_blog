@@ -6,10 +6,19 @@
     <description>Recent content in programming on Exploit The Day</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sun, 07 Jun 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 11 Jun 2020 01:46:54 +0800</lastBuildDate>
     
 	<atom:link href="https://m-ouse.github.io/tags/programming/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Windows那点事</title>
+      <link>https://m-ouse.github.io/post/Windows%E9%82%A3%E7%82%B9%E4%BA%8B/</link>
+      <pubDate>Thu, 11 Jun 2020 01:46:54 +0800</pubDate>
+      
+      <guid>https://m-ouse.github.io/post/Windows%E9%82%A3%E7%82%B9%E4%BA%8B/</guid>
+      <description>&lt;p&gt;那些发生在Windows底层的神秘操作&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>VS中Debug与Release的神秘差异</title>
