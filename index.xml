@@ -6,7 +6,7 @@
     <description>Recent content on Exploit The Day</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Mon, 08 Jun 2020 17:57:27 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 10 Jun 2020 09:59:41 +0800</lastBuildDate>
     
 	<atom:link href="https://m-ouse.github.io/index.xml" rel="self" type="application/rss+xml" />
     
@@ -32,6 +32,15 @@ Naivekun
 Woolensheep
 forever404
 cubiccm</description>
+    </item>
+    
+    <item>
+      <title>swpuctf-re</title>
+      <link>https://m-ouse.github.io/post/swpuctf-re/</link>
+      <pubDate>Wed, 10 Jun 2020 09:59:41 +0800</pubDate>
+      
+      <guid>https://m-ouse.github.io/post/swpuctf-re/</guid>
+      <description></description>
     </item>
     
     <item>
