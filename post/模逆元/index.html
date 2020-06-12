@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>proxychains配置 - Exploit The Day</title>
+  <title>模逆元 - Exploit The Day</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -26,7 +26,7 @@
 <meta name="generator" content="Hugo 0.72.0 with theme even" />
 
 
-<link rel="canonical" href="https://m-ouse.github.io/post/proxychains%E9%85%8D%E7%BD%AE/" />
+<link rel="canonical" href="https://m-ouse.github.io/post/%E6%A8%A1%E9%80%86%E5%85%83/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -40,22 +40,22 @@
 <link rel="stylesheet" href="/css/reset-even.css">
 
 
-<meta property="og:title" content="proxychains配置" />
+<meta property="og:title" content="模逆元" />
 <meta property="og:description" content="NULL" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://m-ouse.github.io/post/proxychains%E9%85%8D%E7%BD%AE/" />
-<meta property="article:published_time" content="2020-01-24T00:00:00+00:00" />
-<meta property="article:modified_time" content="2020-01-24T00:00:00+00:00" />
-<meta itemprop="name" content="proxychains配置">
+<meta property="og:url" content="https://m-ouse.github.io/post/%E6%A8%A1%E9%80%86%E5%85%83/" />
+<meta property="article:published_time" content="2020-06-12T09:41:02+08:00" />
+<meta property="article:modified_time" content="2020-06-12T09:41:02+08:00" />
+<meta itemprop="name" content="模逆元">
 <meta itemprop="description" content="NULL">
-<meta itemprop="datePublished" content="2020-01-24T00:00:00&#43;00:00" />
-<meta itemprop="dateModified" content="2020-01-24T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="392">
+<meta itemprop="datePublished" content="2020-06-12T09:41:02&#43;08:00" />
+<meta itemprop="dateModified" content="2020-06-12T09:41:02&#43;08:00" />
+<meta itemprop="wordCount" content="868">
 
 
 
-<meta itemprop="keywords" content="tools," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="proxychains配置"/>
+<meta itemprop="keywords" content="math," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="模逆元"/>
 <meta name="twitter:description" content="NULL"/>
 
 <!--[if lte IE 9]>
@@ -127,12 +127,12 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">proxychains配置</h1>
+      <h1 class="post-title">模逆元</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 2020-01-24 00:00 </span>
+        <span class="post-time"> 2020-06-12 09:41 </span>
         <div class="post-category">
-            <a href="/categories/Linux/"> Linux </a>
+            <a href="/categories/Algorithm/"> Algorithm </a>
             </div>
         <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
       </div>
@@ -145,10 +145,8 @@
   <ul>
     <li>
       <ul>
-        <li><a href="#1下载安装">1.下载&amp;安装</a></li>
-        <li><a href="#2配置">2.配置</a></li>
-        <li><a href="#3使用">3.使用</a></li>
-        <li><a href="#4tips">4.Tips</a></li>
+        <li><a href="#0x1-定义">0x1 定义</a></li>
+        <li><a href="#0x2-求模反元素">0x2 求模反元素</a></li>
       </ul>
     </li>
   </ul>
@@ -156,82 +154,54 @@
   </div>
 </div>
     <div class="post-content">
-      <p>由于国内git的速度实在是令人无法忍受，和其他一些终端的操作需要代理，配置了一波proxychains解决以上问题。</p>
-<h3 id="1下载安装">1.下载&amp;安装</h3>
-<h5 id="0x1利用apt安装">0x1	利用apt安装</h5>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">sudo apt install proxychains
-</code></pre></td></tr></table>
-</div>
-</div><h5 id="0x2折腾一下">0x2	折腾一下</h5>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">git clone https://github.com/rofl0r/proxychains-ng.git
-<span class="nb">cd</span> proxychains-ng
-./configure
-make <span class="o">&amp;&amp;</span> make install
-cp ./src/proxychains.conf /etc/proxychains.conf
-<span class="nb">cd</span> .. <span class="o">&amp;&amp;</span> rm -rf proxychains-ng
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="2配置">2.配置</h3>
-<p>配置文件在/etc/proxychains.conf下，我们用以下指令：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">vim /etc/proxychains.conf
-</code></pre></td></tr></table>
-</div>
-</div><p>将<code>socks4 127.0.0.1 9095</code>修改为<code>socks5 127.0.0.1 10808</code>，因为我v2ray的配置端口是10808，所以这里填了10808，如果使用的是酸酸，默认端口为1080，proxychains配置文件中修改为1080即可。</p>
-<h3 id="3使用">3.使用</h3>
-<p>在你要使用的命令前加proxychains即可。举一个栗子：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">proxychains curl -i www.google.com
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="4tips">4.Tips</h3>
-<p>由于命令太长（<del>太懒</del>，我做了一个proxychains的快捷指令。</p>
-<p>在home下的.vimrc中追加一行</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">vim ~/.bashrc	<span class="c1">#打开文件</span>
-
-<span class="nb">alias</span> <span class="nv">px</span><span class="o">=</span><span class="s1">&#39;proxychains&#39;</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>执行</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">source</span> .bashrc
-</code></pre></td></tr></table>
-</div>
-</div><p>刷新后 ，即可使用快捷命令，比如我使用的是<code>px + 命令  </code></p>
+      <h3 id="0x1-定义">0x1 定义</h3>
+<p>有整数a，b，n。整数a对同余n的模反元素指满足下式的整数b：</p>
+<p>$ a^{-1}\equiv b (\bmod n) $ 或者 $ ab \equiv 1 (\bmod n) $</p>
+<p>整数 a 对模数 n 之模反元素存在的<code>充分必要条件</code>是 a 和 n <code>互质</code>，若此模反元素存在，在模数 n 下的除法可以用和对应模反元素的乘法来达成，此概念和实数除法的概念相同。</p>
+<h3 id="0x2-求模反元素">0x2 求模反元素</h3>
+<ol>
+<li>
+<h4 id="扩展欧几里得算法">扩展欧几里得算法</h4>
+<p>设exgcd(a,n)为扩展欧几里得算法的函数，则可得到$ax+ny=g$，g是a,n的最大公因数。</p>
+<p><strong>若 $g=1$</strong></p>
+<p>则该模反元素存在，根据结果$a x+n y=1$</p>
+<p>在 mod n 之下，$a x+n y \equiv a x \equiv 1$，根据模反元素的定义$a \cdot a^{-1} \equiv 1$，此时x即为a关于模n的其中一个模反元素。</p>
+<p>事实上，$x+k n(k \in \mathbb{Z})$ 都是a关于模n的模反元素，这里我们取最小的正整数解$x \bmod n(x&lt;n)$。</p>
+<p><strong>若$g \neq 1$</strong></p>
+<p>则该模反元素’‘不存在’‘。</p>
+<p>因为根据结果$a x+n y \neq 1$，在 mod n之下，$a x \equiv g(g&lt;n)$不会同余1，因此满足$a \cdot a^{-1} \equiv 1$的$a^{-1}$不存在。</p>
+<p><strong>demo</strong></p>
+<p>已知整数a、b，扩展欧几里得算法可以在求得a、b的最大公约数的同时，能找到整数x、y（其中一个很可能是负数），使它们满足贝祖等式$a x+b y=\operatorname{gcd}(a, b)$。</p>
+<p>用类似辗转相除法，求二元一次不定方程$53 x+19 y=1$的整数解。</p>
+<blockquote>
+<p>$53=19 \times 2+15$</p>
+<p>$19=15 \times 1+4$</p>
+<p>$15=4 \times 3 +3$</p>
+<p>$4=3 \times 1+1$</p>
+</blockquote>
+<p>然后把它们改写成“余数等于”的形式</p>
+<blockquote>
+<p>$15=53 \times 1+19 \times (-2)$ // 式1</p>
+<p>$4=19 \times 1+15 \times (-1)$   // 式2</p>
+<p>$3=15 \times 1 +4 \times (-3)$    // 式3</p>
+<p>$1=4 \times 1+3 \times (-1)$</p>
+</blockquote>
+<p>然后把它们“倒回去”</p>
+<p>$1=4 \times 1+3 \times (-1)$</p>
+<p>$1=4 \times 1+[15 \times 1 +4 \times (-3)] \times (-1)$ //用式3</p>
+<p>$1=15 \times (-1) + 4 \times 4$</p>
+<p>$1=15 \times (-1) + [19 \times 1+15 \times (-1)] \times 4$ // 用式2</p>
+<p>$1=19 \times 4 + 15 \times (-5)$</p>
+<p>$1=19 \times 4 + [53 \times 1+19 \times (-2)] \times (-5)$ // 用式1</p>
+<p>$1=53 \times (-5) + 19 \times 14$</p>
+<p>解得：$x = -5,y = 14$</p>
+</li>
+<li>
+<h4 id="欧拉定理">欧拉定理</h4>
+<p>欧拉定理证明当a,n为两个<code>互质</code>的<code>正整数</code>时，则有$a^{\varphi(n)} \equiv 1(\bmod n)$，其中$\varphi(n)$为<code>欧拉函数</code>（小于等于n且与n互质的正整数个数）。上述结果可分解为$a^{\varphi(n)}=a \cdot a^{\varphi(n)-1} \equiv 1(\bmod n)$，其中$a^{\varphi(n)-1}$即为a关于模n之模反元素。</p>
+</li>
+</ol>
+<p>参考：http://abloz.com/tech/2018/08/21/modular-multiplicative-inverse/</p>
     </div>
 
     <div class="post-copyright">
@@ -242,7 +212,7 @@ cp ./src/proxychains.conf /etc/proxychains.conf
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2020-01-24 00:00
+        2020-06-12 09:41
         
     </span>
   </p>
@@ -254,16 +224,12 @@ cp ./src/proxychains.conf /etc/proxychains.conf
 </div>
 <footer class="post-footer">
       <div class="post-tags">
-          <a href="/tags/tools/">tools</a>
+          <a href="/tags/math/">math</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/post/rm%E5%91%BD%E4%BB%A4%E7%9A%84%E4%B8%80%E4%BA%9B%E6%93%8D%E4%BD%9C/">
-            <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">rm命令的一些操作</span>
-            <span class="prev-text nav-mobile">上一篇</span>
-          </a>
-        <a class="next" href="/post/hook_example0/">
-            <span class="next-text nav-default">hook_example0</span>
+        
+        <a class="next" href="/post/Windows%E9%82%A3%E7%82%B9%E4%BA%8B/">
+            <span class="next-text nav-default">Windows那点事</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
           </a>
