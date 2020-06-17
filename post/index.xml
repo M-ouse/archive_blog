@@ -6,10 +6,19 @@
     <description>Recent content in Posts on Exploit The Day</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 17 Jun 2020 01:06:05 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 17 Jun 2020 10:51:33 +0800</lastBuildDate>
     
 	<atom:link href="https://m-ouse.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Windows Kernel Exploit 2-PoolOverflow</title>
+      <link>https://m-ouse.github.io/post/Windows-Kernel-Exploit-3-PoolOverflow/</link>
+      <pubDate>Wed, 17 Jun 2020 10:51:33 +0800</pubDate>
+      
+      <guid>https://m-ouse.github.io/post/Windows-Kernel-Exploit-3-PoolOverflow/</guid>
+      <description>&lt;p&gt;友好简单的Windows内核漏洞分析3（因为考虑将此系列投稿到某平台，所以暂时将内容挂起，交流请私戳）&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Windows Kernel Exploit 2-ArbitraryWrite</title>
