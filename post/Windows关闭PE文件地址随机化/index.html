@@ -50,7 +50,7 @@
 <meta itemprop="description" content="NULL">
 <meta itemprop="datePublished" content="2019-11-02T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2019-11-02T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="730">
+<meta itemprop="wordCount" content="736">
 
 
 
@@ -146,7 +146,7 @@
     <li><a href="#0x1-aslraddress-space-layout-randomization">0x1 ASLR(Address Space Layout Randomization)</a></li>
     <li><a href="#0x2-删除aslr功能">0x2 删除ASLR功能</a>
       <ul>
-        <li><a href="#0x21-利用visual-c创建文件">0x2.1 利用Visual C++创建文件</a></li>
+        <li><a href="#0x21-利用visual-studio创建文件">0x2.1 利用Visual Studio创建文件</a></li>
         <li><a href="#0x22-节区信息">0x2.2 节区信息</a></li>
         <li><a href="#0x23-删除aslr功能">0x2.3 删除ASLR功能</a></li>
       </ul>
@@ -159,8 +159,8 @@
       <h2 id="0x1-aslraddress-space-layout-randomization">0x1 ASLR(Address Space Layout Randomization)</h2>
 <p>借助AELR技术，PE文件每次加载到内存的起始地址都会随机化并且每次运行时相应进程的栈以及堆的起始地址都会变化。简单地说就是EXE文件运行时加载到到进程内存的实际地址不同。因为增加了Windows的安全性，也增加了逆向分析的难度，因此删除ASLR功能可以为PE文件的逆向工作减轻负担。</p>
 <h2 id="0x2-删除aslr功能">0x2 删除ASLR功能</h2>
-<h3 id="0x21-利用visual-c创建文件">0x2.1 利用Visual C++创建文件</h3>
-<p>Visual C++编译文件默认应用ASLR技术，可以在工程Properties-Linker-Advanced-Randomized Base Address中打开或关闭。
+<h3 id="0x21-利用visual-studio创建文件">0x2.1 利用Visual Studio创建文件</h3>
+<p>Visual Studio编译文件默认应用ASLR技术，可以在工程Properties-Linker-Advanced-Randomized Base Address中打开或关闭。
 <img src="http://23.91.100.118:8080/images/2019/11/01/generate_file.png" alt="Generate"></p>
 <p>下图分别是调试开启ASLR和禁用ASLR功能的EXE文件</p>
 <p><img src="http://23.91.100.118:8080/images/2019/11/01/aslr.png" alt="Debug ASLR"><br>
