@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Database on Exploit The Day</title>
+    <link>https://m-ouse.github.io/categories/Database/</link>
+    <description>Recent content in Database on Exploit The Day</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Wed, 07 Oct 2020 18:24:54 +0800</lastBuildDate>
+    
+	<atom:link href="https://m-ouse.github.io/categories/Database/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>DDIA 7 事务 读薄</title>
+      <link>https://m-ouse.github.io/post/ddia/</link>
+      <pubDate>Wed, 07 Oct 2020 18:24:54 +0800</pubDate>
+      
+      <guid>https://m-ouse.github.io/post/ddia/</guid>
+      <description>&lt;p&gt;DDIA 读书笔记&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

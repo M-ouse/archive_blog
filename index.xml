@@ -6,7 +6,7 @@
     <description>Recent content on Exploit The Day</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 17 Jun 2020 10:51:33 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 07 Oct 2020 18:24:54 +0800</lastBuildDate>
     
 	<atom:link href="https://m-ouse.github.io/index.xml" rel="self" type="application/rss+xml" />
     
@@ -32,6 +32,15 @@ Naivekun
 Woolensheep
 forever404
 cubiccm</description>
+    </item>
+    
+    <item>
+      <title>DDIA 7 事务 读薄</title>
+      <link>https://m-ouse.github.io/post/ddia/</link>
+      <pubDate>Wed, 07 Oct 2020 18:24:54 +0800</pubDate>
+      
+      <guid>https://m-ouse.github.io/post/ddia/</guid>
+      <description>&lt;p&gt;DDIA 读书笔记&lt;/p&gt;</description>
     </item>
     
     <item>
