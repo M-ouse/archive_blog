@@ -6,10 +6,19 @@
     <description>Recent content in Windows on Exploit The Day</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 17 Jun 2020 10:51:33 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 07 Oct 2020 18:31:08 +0800</lastBuildDate>
     
 	<atom:link href="https://m-ouse.github.io/categories/Windows/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>深入理解wow64 I</title>
+      <link>https://m-ouse.github.io/post/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3wow64-I/</link>
+      <pubDate>Wed, 07 Oct 2020 18:31:08 +0800</pubDate>
+      
+      <guid>https://m-ouse.github.io/post/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3wow64-I/</guid>
+      <description>&lt;p&gt;揭开x86程序在x86-64架构下运行机制的神秘面纱。&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Windows Kernel Exploit 3-PoolOverflow</title>
