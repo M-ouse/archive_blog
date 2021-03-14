@@ -6,7 +6,7 @@
     <description>Recent content on Exploit The Day</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 07 Oct 2020 18:31:08 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 19 Dec 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://m-ouse.github.io/index.xml" rel="self" type="application/rss+xml" />
     
@@ -32,6 +32,15 @@ Naivekun
 Woolensheep
 forever404
 cubiccm</description>
+    </item>
+    
+    <item>
+      <title>llvm混淆框架</title>
+      <link>https://m-ouse.github.io/post/llvm%E6%B7%B7%E6%B7%86%E6%A1%86%E6%9E%B6/</link>
+      <pubDate>Sat, 19 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://m-ouse.github.io/post/llvm%E6%B7%B7%E6%B7%86%E6%A1%86%E6%9E%B6/</guid>
+      <description></description>
     </item>
     
     <item>
