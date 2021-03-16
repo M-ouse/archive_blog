@@ -146,15 +146,15 @@
 </div>
     <div class="post-content">
       <p>入门Pwn的一道题，利用了构造ROP链和泄露libc地址getshell，对于新手来说比较全面，简单记录一下</p>
-<p><img src="http://23.91.100.118:8080/images/2020/02/05/2020-02-05_153500.png" alt=""></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/cisc_2019_c_1/2020-02-05_153500.png?raw=true" alt=""></p>
 <p>先检查程序开的保护，开了NX，不能往buf里填shellcode了，没有canary，放心溢出</p>
 <p>看一下程序的流程</p>
-<p><img src="http://23.91.100.118:8080/images/2020/02/05/2020-02-05_153944.png" alt=""></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/cisc_2019_c_1/2020-02-05_153944.png?raw=true" alt=""></p>
 <p>简单分析一下，溢出点只能在encrypt里</p>
-<p><img src="http://23.91.100.118:8080/images/2020/02/05/2020-02-05_154206.png" alt=""></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/cisc_2019_c_1/2020-02-05_154206.png?raw=true" alt=""></p>
 <p>s和rbp的距离为0x50，那么只需要在覆盖之后利用调用过的puts函数，将puts的真实地址泄露出来，再利用libc.so或者LibcSearcher莽出system和/bin/sh的地址就可以getshell了。泄露之后要让程序再执行一遍gets，这里我选择让他返回encrypt函数。</p>
 <p>由于是64位的程序，所以要把GOT表中puts的地址放入rdi中，所以需要一个pop rdi的gadget</p>
-<p><img src="http://23.91.100.118:8080/images/2020/02/05/2020-02-05_155647.png" alt=""></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/cisc_2019_c_1/2020-02-05_155647.png?raw=true" alt=""></p>
 <p>至此，可以写出exp了</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">

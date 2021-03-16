@@ -196,8 +196,8 @@
 </blockquote>
 <h3 id="isolation隔离性">Isolation（隔离性）</h3>
 <p>并发执行的事务相对相对隔离。</p>
-<p><img src="https://s1.ax1x.com/2020/10/03/01cQvn.png" alt="image-20201002093113319"></p>
-<p><img src="https://s1.ax1x.com/2020/10/03/01cMgs.png" alt="image-20201002082013936"></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/ddia/01cQvn.png?raw=true" alt="image-20201002093113319"></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/ddia/01cMgs.png?raw=true" alt="image-20201002082013936"></p>
 <h3 id="durability持久性">Durability（持久性）</h3>
 <p>可靠的介质写入数据，不用担心数据丢失。</p>
 <h2 id="2-单对象与多对象事务操作">2. 单对象与多对象事务操作</h2>
@@ -337,7 +337,7 @@ end
 </ol>
 <h4 id="防止脏读">防止脏读：</h4>
 <p>事务的任何写入只有在成功提交之后，才能被他人观察到。</p>
-<p><img src="https://s1.ax1x.com/2020/10/03/01c1uq.png" alt="image-20201002091611999"></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/ddia/01c1uq.png?raw=true" alt="image-20201002091611999"></p>
 <p>例子：</p>
 <ul>
 <li>如果事务需要更新多个对象，脏读意味着另一个事务会看到部分更新，而非全部。例如用户看到了新的未读电子邮件，而看不到未读计数器的更新，会造成用户的困惑。</li>
@@ -345,7 +345,7 @@ end
 </ul>
 <h4 id="防止脏写">防止脏写：</h4>
 <p>如果两个事务同时尝试更新相同的对象，通常是推迟第二个写请求，直到前面的事务完成提交或中止。</p>
-<p><img src="https://s1.ax1x.com/2020/10/03/01c3D0.png" alt="image-20201002092613317"></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/ddia/01c3D0.png?raw=true" alt="image-20201002092613317"></p>
 <p>例子：</p>
 <ul>
 <li>如图，Alice和Bob尝试购买同一辆车，购买汽车需要两次数据库写入（更新买家和更新发票），而图中的操作车主被改为Bob，而发票却给了Alice。</li>
@@ -360,7 +360,7 @@ end
 <p><strong>快照隔离</strong>：每个事务都从数据库的<strong>一致快照（consistent snapshot）</strong> 中读取——也就是说，事务可以看到事务开始时在数据库中提交的所有数据。即使这些数据随后被另一个事务更改，每个事务也只能看到该特定时间点的旧数据。</p>
 <p><strong>实现快照隔离</strong>：<strong>多版本并发控制（MVCC, multi-version concurrentcy control）</strong>, 一种典型的方法是<strong>读已提交</strong>为每个查询使用单独的快照，而<strong>快照隔离</strong>对整个事务使用相同的快照。</p>
 <p>表中的每一行都有一个 <code>created_by</code> 字段，其中包含将该行插入到表中的的事务ID。此外，每行都有一个 <code>deleted_by</code> 字段，最初是空的。如果某个事务删除了一行，那么该行实际上并未从数据库中删除，而是通过将 <code>deleted_by</code> 字段设置为请求删除的事务的ID来标记为删除。在稍后的时间，当确定没有事务可以再访问已删除的数据时，数据库中的垃圾收集过程会将所有带有删除标记的行移除，并释放其空间。</p>
-<p><img src="https://s1.ax1x.com/2020/10/03/01cK3j.png" alt="image-20201002104827679"></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/ddia/01cK3j.png?raw=true" alt="image-20201002104827679"></p>
 <p><strong>观察一致性快照的可见性规则</strong>：</p>
 <ul>
 <li>读事务开始时，创建该对象的事务已经提交。</li>
@@ -453,11 +453,11 @@ COMMIT;
 <h3 id="34-写偏差与幻读">3.4 写偏差与幻读</h3>
 <p><strong>两个事物读取相同的对象集合，然后更新其中的一些对象</strong>。如果更新的对象不同，可能会发生写入偏差；如果更新的对象相同，则可能发生脏写或丢失更新。</p>
 <p>例如：你正在为医院写一个医生轮班管理程序。医院通常会同时要求几位医生待命，但底线是至少有一位医生在待命。医生可以放弃他们的班次（例如，如果他们自己生病了），只要至少有一个同事在这一班中继续工作。如果两人恰巧都感到身体不适，并同时点击了调班按钮，接下发生的事如图7-8所示：</p>
-<p><img src="https://s1.ax1x.com/2020/10/03/01cYUU.png" alt="image-20201002112019206"></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/ddia/01cYUU.png?raw=true" alt="image-20201002112019206"></p>
 <p>由于数据库采用的是快照级别隔离，两个检查都会返回有两名医生，所以两个事务都安全地进入下一个阶段。最后结果是没有医生在值班，显然违背了至少一名医生在班的业务要求。</p>
 <p>更多写偏差的例子：</p>
 <p><img src="http://23.91.100.118:8080/images/2020/10/02/6da0e5e1bcdb7d9921b98bde97a19d00.png" alt="image-20201002112353923"></p>
-<p><img src="http://23.91.100.118:8080/images/2020/10/02/ab94929cdc173ff2837cf4098ab16593.png" alt="image-20201002112413311"></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/ddia/ab94929cdc173ff2837cf4098ab16593.png?raw=true" alt="image-20201002112413311"></p>
 <h4 id="写偏差定义">写偏差定义：</h4>
 <p>它既不是<strong>脏写</strong>，也不是<strong>丢失更新</strong>，因为这两个事务正在更新两个不同的对象（Alice和Bob各自的待命记录）。在这里发生的冲突并不是那么明显，但是这显然是一个竞争条件：如果两个事务一个接一个地运行，那么第二个医生就不能歇班了。异常行为只有在事务并发进行时才有可能。</p>
 <h4 id="幻读定义">幻读定义：</h4>

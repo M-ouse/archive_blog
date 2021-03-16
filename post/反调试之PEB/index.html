@@ -237,7 +237,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><p>利用VS反汇编的功能，跟进<code>IsDebuggerPresent()</code>，发现其实现了如下功能</p>
-<p><img src="http://23.91.100.118:8080/images/2020/02/14/2020-02-14_162658.png" alt=""></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/debug/2020-02-14_162658.png?raw=true" alt=""></p>
 <p><code>mov eax,dword ptr fs:[00000030h]</code>是将fs段偏移为0x30的内容存到eax，而该地址正是PEB的首地址指针</p>
 <p><code>movzx eax,byte ptr [eax+2]</code>由上文可知，这里是BeingDebugged的值。</p>
 <p>通过内嵌ASM的方法，我们同样可以获得此处的值。</p>

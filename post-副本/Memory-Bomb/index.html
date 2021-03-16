@@ -127,7 +127,7 @@
           <article class="post">
   <div class="post-content">
     <p>近日日题，感叹Re狗真实越来越难了，vmp常态，obfu打的亲妈都不认识，我自己想了一下还有什么不落窠臼的混淆可以抵抗选手分析，于是写了一个简陋的PELoader，实现新开进程，在内存直接执行exe，但难逃被静态分析的命运，exe被dump出来就GG了，如果把这个exe的bytes进行加密，那么还是显得很老套，接着想了一个方法并起名为<em><strong>Memory Bomb</strong></em>。<del>（是不是很形象）</del></p>
-<p><img src="http://23.91.100.118:8080/images/2020/05/25/2020-05-26_012443.png" alt=""></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/memorybomb/2020-05-26_012443.png?raw=true" alt=""></p>
 <p>先简述一下实现：Bomb函数A，函数A的逆函数B，以及关键代码段。函数A实现一个插垃圾值（我设置的是0）算法，向关键代码段“无规律插值“，函数B在程序运行时拔除垃圾值。</p>
 <p>这样即便关键代码有十分明显的特征让选手看出来，但就算dump出来也没办法分析，关键是实现简单。</p>
 <p>所以问题就在如何保护函数B，让他没那么容易被日掉，以及抵抗动态调试，防止选手利用函数B解密关键代码段。目前我想到了以下几种方式：</p>

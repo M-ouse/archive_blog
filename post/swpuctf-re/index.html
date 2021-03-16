@@ -162,22 +162,22 @@
 <li>概述：这道题创建并调试一个子进程，通过*IsDebuggerPresent()*判断，如果调试器存在的话就运行check流程，不存在则等待子进程触发int3异常，父进程再对子进程相应位置进行Patch。所以对应解决方案可以Patch好程序直接走check路线调试。</li>
 <li>调试细节：</li>
 </ol>
-<p><img src="http://23.91.100.118:8080/images/2020/06/09/2020-06-10_101656.png" alt=""></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/swpuctf/2020-06-10_101656.png?raw=true" alt=""></p>
 <p>上面两个数组是Patch1和Patch2，下面通过一个if判断跳转，因为父进程正常情况下不会被调试，所以不会进入check，子进程被父进程调试进入check</p>
 <ol start="3">
 <li></li>
 </ol>
-<p><img src="http://23.91.100.118:8080/images/2020/06/09/2020-06-10_103157.png" alt=""></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/swpuctf/2020-06-10_103157.png?raw=true" alt=""></p>
 <p>父进程通过WriteProcessMemory对子进程Patch，lpBaseAddress可以通过动态调试获得，也可以看check函数里被nop的位置及长度查看，如下：</p>
-<p><img src="http://23.91.100.118:8080/images/2020/06/09/2020-06-10_103717.png" alt=""></p>
-<p><img src="http://23.91.100.118:8080/images/2020/06/09/2020-06-10_104137.png" alt=""></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/swpuctf/2020-06-10_103717.png?raw=true" alt=""></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/swpuctf/2020-06-10_104137.png?raw=true" alt=""></p>
 <ol start="4">
 <li>
 <p>patch好后就直接调试子进程</p>
-<p><img src="http://23.91.100.118:8080/images/2020/06/09/2020-06-10_104808.png" alt=""></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/swpuctf/2020-06-10_104808.png?raw=true" alt=""></p>
 </li>
 <li>
-<p><img src="http://23.91.100.118:8080/images/2020/06/09/2020-06-10_110043.png" alt=""></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/swpuctf/2020-06-10_110043.png?raw=true" alt=""></p>
 <p>exp：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">

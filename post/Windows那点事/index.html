@@ -159,7 +159,7 @@ at or above DPC/dispatch level must be in nonpageable memory.</p>
 the system. Device drivers that don’t need to access the memory from DPC/dispatch level or
 above can use paged pool. It is accessible from any process context.</p>
 </blockquote>
-<p>而且有<img src="http://23.91.100.118:8080/images/2020/06/10/2020-06-11_020119.png" alt=""></p>
+<p>而且有<img src="https://github.com/M-ouse/pic/blob/main/blog/windows/2020-06-11_020119.png?raw=true" alt=""></p>
 <p>结合驱动开发的相关资料，通俗的说：分页指内存分页的内容可以被置换到磁盘上（或者其他介质），而非分页内存指内存内容不会被置换到磁盘上；且DPC/dispatch level（延迟过程调用/分发级别）或以上的IRQL不可以访问被分页的内存。</p>
 <p>众所周知发生缺页异常之后，系统捕获该异常，从磁盘中把诱发缺页的虚拟地址要求存放的内容放到对应物理地址中，恢复程序对该虚拟地址的使用，而DPC/dispatch或之上级别的中断不能满足缺页异常，故有上述约定。</p>
     </div>

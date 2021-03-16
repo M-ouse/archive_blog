@@ -159,19 +159,19 @@
 <p>按照网上一些教程给出的方法，基本是在bin文件夹下找到含有revoke字串的dll进行patch，本人尝试搜索但没有结果，想是再加载到内存中又经过了几层转换。根据大部分教程，chr(0x54)IM撤回的功能在IM.dll中。拖进IDA中分析也没有看到明显的函数流程，于是准备动态调试，这时候我们知道：撤回功能在IM.dll中。</p>
 <h2 id="3hack-it">3Hack it!</h2>
 <p>首先打开chr(0x54)IM，由于是32位的程序，我选择用x32dbg附加到进程调试，F9先让程序跑起来。</p>
-<p><img src="http://23.91.100.118:8080/images/2019/11/29/image.png" alt=""></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/commercial/image.png?raw=true" alt=""></p>
 <p>然后在符号栏中找出im.dll，并进入该模块</p>
-<p><img src="http://23.91.100.118:8080/images/2019/11/29/imagee497f1a11e2586dd.png" alt=""></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/commercial/imagee497f1a11e2586dd.png?raw=true" alt=""></p>
 <p>发挥传统艺能，利用关键字revoke搜索字符串</p>
-<p><img src="http://23.91.100.118:8080/images/2019/11/29/image9491abff17c4f3e3.png" alt=""></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/commercial/image9491abff17c4f3e3.png?raw=true" alt=""></p>
 <p>发现3个可疑的函数，其中有buddy（好友），disc（讨论组），group（群），大胆猜测这三个字符串代表而的函数应该就是实现撤回功能的函数，于是在这三处下断点。这里说一下本人逆向的全部过程：在所有带有revoke的语句都下了断点，一步一步踩坑最后跟踪到了这个地方，虽然会由于一些antidebug耗费一些时间，但这个过程我认为是必不可少而且很有趣的。说坑的原因是在进入函数跟踪的时候很容易跑飞触发一些antidebug的函数，然后主进程会新建检测线程对栈内容和指令进行检测（这个很骚，没有完全跟踪到检测的逻辑），或判断是否在调试状态，最后抛出异常使调试器卡死在ntdll.dll中。</p>
 <p>回到正题，发给小号一条消息并撤回，正好命中在我们猜测的断点上。</p>
-<p><img src="http://23.91.100.118:8080/images/2019/11/29/image04c07f532d764c66.png" alt=""></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/commercial/image04c07f532d764c66.png?raw=true" alt=""></p>
 <p>然后我们回溯函数，可以轻松看到call这个函数之前push了2个参数，于是我们把该函数的<code>push ebp</code>patch成<code>retn 8</code>，再让程序运行，这时我们阻止撤回的操作已经完成了:)（这里本人猜测采用的是cdecl的函数调用约定，所以ret后的参数是多少无所谓，最终会由调用者平衡堆栈）</p>
-<p><img src="http://23.91.100.118:8080/images/2019/11/29/imagece0108ce88b81ee7.png" alt=""></p>
-<p><img src="http://23.91.100.118:8080/images/2019/11/29/image0d8e169e570337a5.png" alt=""></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/commercial/imagece0108ce88b81ee7.png?raw=true" alt=""></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/commercial/image0d8e169e570337a5.png?raw=true" alt=""></p>
 <p>以上是实现了好友间的防撤回，若想在群和讨论组中应用，将其他两个函数进行同样操作即可。</p>
-<p><img src="http://23.91.100.118:8080/images/2019/11/29/image-20191129160737278.png" alt=""></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/commercial/image-20191129160737278.png?raw=true" alt=""></p>
 <h2 id="4挖一点小坑">4挖一点小坑</h2>
 <ul>
 <li>a.不对这个函数进行patch，让其正常执行，消息也没有被立即撤回，进一步猜测这个函数的功能是初始化被撤回内容的参数</li>
