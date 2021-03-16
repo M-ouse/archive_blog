@@ -50,7 +50,7 @@
 <meta itemprop="description" content="NULL">
 <meta itemprop="datePublished" content="2020-10-07T18:31:08&#43;08:00" />
 <meta itemprop="dateModified" content="2020-10-07T18:31:08&#43;08:00" />
-<meta itemprop="wordCount" content="3128">
+<meta itemprop="wordCount" content="2864">
 
 
 
@@ -183,20 +183,20 @@
 <h1 id="0x22-线索2-段寄存器全局描述符表段描述符">0x2.2 线索2 段寄存器，全局描述符表，段描述符</h1>
 <p>说起段寄存器，有过一些汇编基础的人会想当然认为地址 = 段寄存器&laquo;4 + ip。但是进一步学习操作系统会发现，前者只适用于实模式下的寻址；<del>开启保护模式后的操作系统，段寄存器的实际长度位96(32+32+16+16)位，前80位在processor内部不可见，只显示最后的16位。因此“16位的段寄存器”中的数据不再负责记录偏移用作寻址，而是作为选择子，充当GDT的index。</del>（实际结构笔者并未在intel手册上查找到记载，在亲自逆向或查阅后会更新内容）</p>
 <p>笔者查阅intel的手册后发现：在保护模式下段寄存器实际不止16位，还有一部分在processor内部，外部不可见，这部分不可见的部分有时会被作为段描述符的缓存。最后可见的16位作为Selector充当GDT的index。</p>
-<p>![](深入理解wow64 I.assets/9d5d4140250ef2c84c4550c487d12376.png)</p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/wow64I/9d5d4140250ef2c84c4550c487d12376.png?raw=true" alt=""></p>
 <p>注：保护模式下用户态每个进程的CS，DS等的BaseAddr都是0。</p>
 <p>下图给出了16位Selector的结构细节以及作用：</p>
-<p>![](深入理解wow64 I.assets/628999826f512cb259bb004c85f581a4.png)</p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/wow64I/628999826f512cb259bb004c85f581a4.png?raw=true" alt=""></p>
 <p>这里需要解释一下，Windows只采用GDT而不采用LDT，GDT全局可见，因此TI始终为0。对于低2位而言，如果是CS，则为CPL。<a href="https://blog.csdn.net/better0332/article/details/3416749">CPL,RPL,DPL的联系和区别</a></p>
 <p>例如CS分别为0x23，0x33时，二进制来看就是：0b100011和0b110011。</p>
 <p>介绍完低3位之后，就剩下Index没有说了，作用详见下图。</p>
-<p>![](深入理解wow64 I.assets/0b2994d5c3b4fb687641b1c6e93e205e.png)</p>
-<p>![](深入理解wow64 I.assets/3143dc384662c369703295cfd89b09db.png)</p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/wow64I/0b2994d5c3b4fb687641b1c6e93e205e.png?raw=true" alt=""></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/wow64I/3143dc384662c369703295cfd89b09db.png?raw=true" alt=""></p>
 <p>上图就是段描述符，它作为元素存在GDT中。每个段可以根据Selector在GDT中寻找并填充关于它的运行权限、状态等。</p>
-<p>![](深入理解wow64 I.assets/36ba9a32e30e34883c5e7615419d3a1e.png)</p>
-<p>![](深入理解wow64 I.assets/a9c5eb645939b9afb7eba350184083af.png)</p>
-<p>![](深入理解wow64 I.assets/3073003585087ffc983b34b4a61e9c5e.png)</p>
-<p>![](深入理解wow64 I.assets/53846e462e5b2fbea5fd224c7af3a8ba.png)</p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/wow64I/36ba9a32e30e34883c5e7615419d3a1e.png?raw=true" alt=""></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/wow64I/a9c5eb645939b9afb7eba350184083af.png?raw=true" alt="a9c5eb645939b9afb7eba350184083af.png"></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/wow64I/3073003585087ffc983b34b4a61e9c5e.png?raw=true" alt=""></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/wow64I/53846e462e5b2fbea5fd224c7af3a8ba.png?raw=true" alt=""></p>
 <h1 id="0x3-神秘的段寄存器值-0x23-0x33">0x3 神秘的段寄存器值 0x23 0x33</h1>
 <p>经过<code>0x2</code>的讲解，相信读者已经复习了一遍保护模式下段寄存器的结构和作用，Selector和GDT的关系。接下来就是探究为什么从32-bit切换到64-bit，CS的值要从0x23切换到0x33。将hex转换为bin或者dec更易理解。</p>
 <table>
@@ -266,23 +266,23 @@
 </div>
 </div><p>在VS2019环境下编译，编译选项是x86 Release。接着用64位的WinDbg调试二进制文件。</p>
 <p>跟进VirtualAllocEx函数</p>
-<p>![](深入理解wow64 I.assets/dad6344f38683e8ede7ba929d41786d3.png)</p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/wow64I/dad6344f38683e8ede7ba929d41786d3.png?raw=true" alt=""></p>
 <p>使用PCHunter查看进程加载的模块</p>
-<p>![](深入理解wow64 I.assets/a59df254d562a56571643e732db780e7.png)</p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/wow64I/a59df254d562a56571643e732db780e7.png?raw=true" alt=""></p>
 <p>负责x86切换到x64的dll组件：</p>
 <ol>
 <li><code>Wow64.dll</code>，通往<a href="https://zh.wikipedia.org/wiki/Windows_NT%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84">Windows NT内核</a>的核心接口，它转换32位与64位调用，包括<a href="https://zh.wikipedia.org/wiki/%E6%8C%87%E6%A8%99_(%E9%9B%BB%E8%85%A6%E7%A7%91%E5%AD%B8)">指针</a>和<a href="https://zh.wikipedia.org/wiki/%E8%B0%83%E7%94%A8%E6%A0%88">调用栈</a>操作。</li>
 <li><code>Wow64win.dll</code>，为32位应用程序提供适当的入口点。</li>
 <li><code>Wow64cpu.dll</code>，负责解决进程从32位切换到64位模式。</li>
 </ol>
-<p>![](深入理解wow64 I.assets/71b14b682a68a89d7f3cd597b104086b.png)</p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/wow64I/71b14b682a68a89d7f3cd597b104086b.png?raw=true" alt=""></p>
 <p>同时我们也注意到了进程模块还加载了位于system32和syswow64下的ntdll，众所周知ntdll是处理用户态和内核态的媒介。但上述dll的内部细节并不打算在本次文章详解，不妨留到后面。我们的任务仍然是探索CS改变背后的原理。</p>
 <p>继续Step In，跟进ntdll里面。</p>
-<p>![](深入理解wow64 I.assets/22f155596b467ffedb76d2f87e9b56c0.png)</p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/wow64I/22f155596b467ffedb76d2f87e9b56c0.png?raw=true" alt=""></p>
 <p>在NtAllocateVirtualMemory里，我们终于看到进程环境切换的<code>far jmp</code>语句：</p>
-<p>![](深入理解wow64 I.assets/481578b7a261526e1e4f1f7d00457874.png)</p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/wow64I/481578b7a261526e1e4f1f7d00457874.png?raw=true" alt=""></p>
 <p>这句话会把ip修改为0x774E6009，cs由0x23修改为0x33。接着看：</p>
-<p>![](深入理解wow64 I.assets/db485261157dac19ab74f634c5fead74.png)</p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/wow64I/db485261157dac19ab74f634c5fead74.png?raw=true" alt=""></p>
 <p>进程环境已经由32-bit切换为64-bit，连寄存器显示的名字都改变了。不妨我们就此打住，把进一步调试的内容留给下一篇文章。</p>
 <h2 id="2查看gdt以及段描述符表">2.查看GDT以及段描述符表</h2>
 <p>前文已经提到过：</p>
@@ -297,9 +297,9 @@
 <p>dq gdtr+0x10*index	//查看GDT附近内存</p>
 <p>dg [Selector]	//由WinDbg解析GDT表项</p>
 </blockquote>
-<p>![](深入理解wow64 I.assets/fa4872e82012e6404295bb4b4548bd82.png)</p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/wow64I/fa4872e82012e6404295bb4b4548bd82.png?raw=true" alt=""></p>
 <p>段描述符的长度大小为64位，换算成16进制也就是一个长度为16的数字，显然Selector 0x23和0x33 分别对应图中的<code>00cffb00 0000ffff</code>和<code>0020fb00 00000000</code>，由WinDbg解析之后的数据如下：</p>
-<p>![](深入理解wow64 I.assets/54af37d238c514dde60d69362ff4002e.png)</p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/wow64I/54af37d238c514dde60d69362ff4002e.png?raw=true" alt=""></p>
 <table>
 <thead>
 <tr>
@@ -322,10 +322,10 @@
 </tbody>
 </table>
 <p>我们只需要注意前四位，他们的意义分别是：G	D/B	L	AVL。下图来自Intel手册</p>
-<p>![](深入理解wow64 I.assets/3073003585087ffc983b34b4a61e9c5e.png)</p>
-<p>![](深入理解wow64 I.assets/53846e462e5b2fbea5fd224c7af3a8ba.png)</p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/wow64I/3073003585087ffc983b34b4a61e9c5e.png?raw=true" alt=""></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/wow64I/53846e462e5b2fbea5fd224c7af3a8ba.png?raw=true" alt=""></p>
 <p>根据Windows的规定，32-bit环境下G=1，D/B=1，L=0，AVL=0；64-bit环境下G=0，D/B=0，L=1，AVL=0。同时我们也注意到，CS的Base为0，这也验证了保护模式下各个段的布局。</p>
-<p>看看DS段：![](深入理解wow64 I.assets/9f294643312a8d99c0f1f960158fdadf.png)</p>
+<p>看看DS段：<img src="https://github.com/M-ouse/pic/blob/main/blog/wow64I/9f294643312a8d99c0f1f960158fdadf.png?raw=true" alt=""></p>
 <h1 id="0x5-总结">0x5 总结</h1>
 <p>通过一些调试手法我们终于窥探到wow64的一隅，但是想要深入理解wow64的运行机制，以及是否会有漏洞利用，还需进一步努力。</p>
     </div>

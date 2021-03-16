@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>反调试之PEB - Exploit The Day</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="2st" /><meta name="description" content="NULL" /><meta name="keywords" content="Mac, Github, Vue, React, Front End" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.72.0 with theme even" />
+
+
+<link rel="canonical" href="https://m-ouse.github.io/post-%E5%89%AF%E6%9C%AC/%E5%8F%8D%E8%B0%83%E8%AF%95%E4%B9%8BPEB/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<link href="/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/reset-even.css">
+
+
+<meta property="og:title" content="反调试之PEB" />
+<meta property="og:description" content="NULL" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://m-ouse.github.io/post-%E5%89%AF%E6%9C%AC/%E5%8F%8D%E8%B0%83%E8%AF%95%E4%B9%8BPEB/" />
+<meta property="article:published_time" content="2020-02-15T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-02-15T00:00:00+00:00" />
+<meta itemprop="name" content="反调试之PEB">
+<meta itemprop="description" content="NULL">
+<meta itemprop="datePublished" content="2020-02-15T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2020-02-15T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1489">
+
+
+
+<meta itemprop="keywords" content="reverse,programming,antidebug," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="反调试之PEB"/>
+<meta name="twitter:description" content="NULL"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Exploit The Day</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a><a href="/friends/">
+        <li class="mobile-menu-item">Friends</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Exploit The Day</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/friends/">Friends</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <div class="post-content">
+    <h3 id="0x1-实现反调试的思路">0x1 实现反调试的思路</h3>
+<p>主角——PEB</p>
+<blockquote>
+<p>Process Environment Block  即进程环境信息块，这里包含了一些进程的信息</p>
+</blockquote>
+<p>PEB的结构如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_PEB</span> <span class="p">{</span>
+  <span class="n">BYTE</span>                          <span class="n">Reserved1</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+  <span class="n">BYTE</span>                          <span class="n">BeingDebugged</span><span class="p">;</span> <span class="c1">//被调试状态
+</span><span class="c1"></span>  <span class="n">BYTE</span>                          <span class="n">Reserved2</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+  <span class="n">PVOID</span>                         <span class="n">Reserved3</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+  <span class="n">PPEB_LDR_DATA</span>                 <span class="n">Ldr</span><span class="p">;</span>
+  <span class="n">PRTL_USER_PROCESS_PARAMETERS</span>  <span class="n">ProcessParameters</span><span class="p">;</span>
+  <span class="n">BYTE</span>                          <span class="n">Reserved4</span><span class="p">[</span><span class="mi">104</span><span class="p">];</span>
+  <span class="n">PVOID</span>                         <span class="n">Reserved5</span><span class="p">[</span><span class="mi">52</span><span class="p">];</span>
+  <span class="n">PPS_POST_PROCESS_INIT_ROUTINE</span> <span class="n">PostProcessInitRoutine</span><span class="p">;</span>
+  <span class="n">BYTE</span>                          <span class="n">Reserved6</span><span class="p">[</span><span class="mi">128</span><span class="p">];</span>
+  <span class="n">PVOID</span>                         <span class="n">Reserved7</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+  <span class="n">ULONG</span>                         <span class="n">SessionId</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">PEB</span><span class="p">,</span> <span class="o">*</span><span class="n">PPEB</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>我们留意BeingDebugged字段，这里记录了进程启动时是否由Debugger启动，是则为1，否则为0。<code> BOOL WINAPI IsDebuggerPresent(void)</code>这个函数实际上就是访问并返回BeingDebugged字段的值。下面我们进行验证。</p>
+<h3 id="0x2-实验过程">0x2 实验过程</h3>
+<p>测试代码如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;windows.h&gt;</span><span class="cp">
+</span><span class="cp"></span><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span> 
+<span class="p">{</span>
+    <span class="kt">bool</span> <span class="n">status</span><span class="p">;</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">IsDebuggerPresent</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">status</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">MessageBoxA</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="s">&#34;Detected debugger&#34;</span><span class="p">,</span> <span class="s">&#34;Find Debugger&#34;</span><span class="p">,</span> <span class="n">MB_OK</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">MessageBoxA</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="s">&#34;Not detected debugger&#34;</span><span class="p">,</span> <span class="s">&#34;No Debugger&#34;</span><span class="p">,</span> <span class="n">MB_OK</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>利用VS反汇编的功能，跟进<code>IsDebuggerPresent()</code>，发现其实现了如下功能</p>
+<p><img src="http://23.91.100.118:8080/images/2020/02/14/2020-02-14_162658.png" alt=""></p>
+<p><code>mov eax,dword ptr fs:[00000030h]</code>是将fs段偏移为0x30的内容存到eax，而该地址正是PEB的首地址指针</p>
+<p><code>movzx eax,byte ptr [eax+2]</code>由上文可知，这里是BeingDebugged的值。</p>
+<p>通过内嵌ASM的方法，我们同样可以获得此处的值。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;windows.h&gt;</span><span class="cp">
+</span><span class="cp"></span><span class="kt">int</span> <span class="nf">Check</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kr">__asm</span><span class="p">{</span>
+        <span class="n">pushad</span>
+        <span class="n">mov</span> <span class="n">eax</span><span class="p">,</span> <span class="n">dword</span> <span class="n">ptr</span> <span class="nl">fs</span> <span class="p">:</span> <span class="p">[</span><span class="mh">0x30</span><span class="p">]</span>
+        <span class="n">movzx</span> <span class="n">eax</span><span class="p">,</span> <span class="n">byte</span> <span class="n">ptr</span><span class="p">[</span><span class="n">eax</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="n">mov</span> <span class="n">flag</span><span class="p">,</span><span class="n">eax</span>
+        <span class="n">popad</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">flag</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span> 
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">Check</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">MessageBoxA</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="s">&#34;Detected debugger&#34;</span><span class="p">,</span> <span class="s">&#34;Find Debugger&#34;</span><span class="p">,</span> <span class="n">MB_OK</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">MessageBoxA</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="s">&#34;Not detected debugger&#34;</span><span class="p">,</span> <span class="s">&#34;No Debugger&#34;</span><span class="p">,</span> <span class="n">MB_OK</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="0x3-fs段常用偏移">0x3 fs段常用偏移</h3>
+<blockquote>
+<p>mov eax, dword ptr fs:[0h]//SEH结构化异常处理地址</p>
+<p>mov eax, dword ptr fs:[04h]//线程堆栈顶部</p>
+<p>mov eax, dword ptr fs:[08h]//线程堆栈底部</p>
+<p>mov eax, dword ptr fs:[0Ch]//SubSystemTib</p>
+<p>mov eax, dword ptr fs:[10h]//FiberData</p>
+<p>mov eax, dword ptr fs:[14h]//ArbitraryUserPointer</p>
+<p>mov eax, dword ptr fs:[18h]//TEB线程环境块</p>
+<p>mov eax, dword ptr fs:[20h]//ClientId 客户端ID结构</p>
+<p>mov eax, dword ptr fs:[24h]//线程ID</p>
+<p>mov eax, dword ptr fs:[30h]//PEB进程环境块</p>
+<p>mov eax, dword ptr fs:[2Ch]//指向线程局部存储指针</p>
+<p>mov eax, dword ptr fs:[34h]//上个错误号</p>
+<p>mov eax, dword ptr fs:[1a8h]//激活上下文堆栈指针结构</p>
+<p>mov eax, dword ptr fs:[1d4h]//GDI线程环境快作业结构?</p>
+<p>mov eax, dword ptr fs:[6b4h]//RealClientId ID结构</p>
+<p>mov eax, dword ptr fs:[bf8h]//静态Unicode字符串</p>
+<p>mov eax, dword ptr fs:[f10h]//线程本地存储TLS</p>
+<p>mov eax, dword ptr fs:[f50h]//活动ID</p>
+<p>mov eax, dword ptr fs:[f74h]//CurrentIdealProcessor 当前处理器?</p>
+<p>mov eax, dword ptr fs:[fb0h]//ActiveFrame活动框架</p>
+</blockquote>
+<h3 id="0x4-teb">0x4 TEB</h3>
+<blockquote>
+<p>+0x000 NtTib            : _NT_TIB</p>
+<p>+0x01c EnvironmentPointer : Ptr32 Void</p>
+<p>+0x020 ClientId         : _CLIENT_ID                        //进程的pid</p>
+<p>+0x028 ActiveRpcHandle  : Ptr32 Void</p>
+<p>+0x02c ThreadLocalStoragePointer : Ptr32 Void</p>
+<p>+0x030 ProcessEnvironmentBlock : Ptr32 _PEB                 //进程PEB</p>
+<p>+0x034 LastErrorValue   : Uint4B</p>
+<p>+0x038 CountOfOwnedCriticalSections : Uint4B</p>
+<p>+0x03c CsrClientThread  : Ptr32 Void</p>
+<p>+0x040 Win32ThreadInfo  : Ptr32 Void</p>
+<p>+0x044 User32Reserved   : [26] Uint4B</p>
+<p>+0x0ac UserReserved     : [5] Uint4B</p>
+<p>+0x0c0 WOW32Reserved    : Ptr32 Void</p>
+<p>+0x0c4 CurrentLocale    : Uint4B</p>
+<p>+0x0c8 FpSoftwareStatusRegister : Uint4B</p>
+<p>+0x0cc SystemReserved1  : [54] Ptr32 Void</p>
+<p>+0x1a4 ExceptionCode    : Int4B</p>
+<p>+0x1a8 ActivationContextStack : _ACTIVATION_CONTEXT_STACK</p>
+<p>+0x1bc SpareBytes1      : [24] UChar</p>
+<p>+0x1d4 GdiTebBatch      : _GDI_TEB_BATCH</p>
+<p>+0x6b4 RealClientId     : _CLIENT_ID</p>
+<p>+0x6bc GdiCachedProcessHandle : Ptr32 Void</p>
+<p>+0x6c0 GdiClientPID     : Uint4B</p>
+<p>+0x6c4 GdiClientTID     : Uint4B</p>
+<p>+0x6c8 GdiThreadLocalInfo : Ptr32 Void</p>
+<p>+0x6cc Win32ClientInfo  : [62] Uint4B</p>
+<p>+0x7c4 glDispatchTable  : [233] Ptr32 Void</p>
+<p>+0xb68 glReserved1      : [29] Uint4B</p>
+<p>+0xbdc glReserved2      : Ptr32 Void</p>
+<p>+0xbe0 glSectionInfo    : Ptr32 Void</p>
+<p>+0xbe4 glSection        : Ptr32 Void</p>
+<p>+0xbe8 glTable          : Ptr32 Void</p>
+<p>+0xbec glCurrentRC      : Ptr32 Void</p>
+<p>+0xbf0 glContext        : Ptr32 Void</p>
+<p>+0xbf4 LastStatusValue  : Uint4B</p>
+<p>+0xbf8 StaticUnicodeString : _UNICODE_STRING</p>
+<p>+0xc00 StaticUnicodeBuffer : [261] Uint2B</p>
+<p>+0xe0c DeallocationStack : Ptr32 Void</p>
+<p>+0xe10 TlsSlots         : [64] Ptr32 Void                  //TLS值 是个数组[64]</p>
+<p>+0xf10 TlsLinks         : _LIST_ENTRY</p>
+<p>+0xf18 Vdm              : Ptr32 Void</p>
+<p>+0xf1c ReservedForNtRpc : Ptr32 Void</p>
+<p>+0xf20 DbgSsReserved    : [2] Ptr32 Void</p>
+<p>+0xf28 HardErrorsAreDisabled : Uint4B</p>
+<p>+0xf2c Instrumentation  : [16] Ptr32 Void</p>
+<p>+0xf6c WinSockData      : Ptr32 Void</p>
+<p>+0xf70 GdiBatchCount    : Uint4B</p>
+<p>+0xf74 InDbgPrint       : UChar</p>
+<p>+0xf75 FreeStackOnTermination : UChar</p>
+<p>+0xf76 HasFiberData     : UChar</p>
+<p>+0xf77 IdealProcessor   : UChar</p>
+<p>+0xf78 Spare3           : Uint4B</p>
+<p>+0xf7c ReservedForPerf  : Ptr32 Void</p>
+<p>+0xf80 ReservedForOle   : Ptr32 Void</p>
+<p>+0xf84 WaitingOnLoaderLock : Uint4B</p>
+<p>+0xf88 Wx86Thread       : _Wx86ThreadState</p>
+<p>+0xf94 TlsExpansionSlots : Ptr32 Ptr32 Void                //TLS扩展值 是个数组[Ptr32]</p>
+<p>+0xf98 ImpersonationLocale : Uint4B</p>
+<p>+0xf9c IsImpersonating  : Uint4B</p>
+<p>+0xfa0 NlsCache         : Ptr32 Void</p>
+<p>+0xfa4 pShimData        : Ptr32 Void</p>
+<p>+0xfa8 HeapVirtualAffinity : Uint4B</p>
+<p>+0xfac CurrentTransactionHandle : Ptr32 Void</p>
+<p>+0xfb0 ActiveFrame      : Ptr32 _TEB_ACTIVE_FRAME</p>
+<p>+0xfb4 SafeThunkCall    : UChar</p>
+<p>+0xfb5 BooleanSpare     : [3] UChar</p>
+</blockquote>
+<h3 id="0x5-peb">0x5 PEB</h3>
+<blockquote>
+<p>typedef struct _PEB
+{
+UCHAR InheritedAddressSpace; // 00h</p>
+<p>UCHAR ReadImageFileExecOptions; // 01h</p>
+<p>UCHAR BeingDebugged; // 02h</p>
+<p>UCHAR Spare; // 03h</p>
+<p>PVOID Mutant; // 04h</p>
+<p>PVOID ImageBaseAddress; // 08h      映像基址</p>
+<p>PPEB_LDR_DATA Ldr; // 0Ch             LDR_DATA结构</p>
+<p>PRTL_USER_PROCESS_PARAMETERS ProcessParameters; // 10h</p>
+<p>PVOID SubSystemData; // 14h</p>
+<p>PVOID ProcessHeap; // 18h</p>
+<p>PVOID FastPebLock; // 1Ch</p>
+<p>PPEBLOCKROUTINE FastPebLockRoutine; // 20h</p>
+<p>PPEBLOCKROUTINE FastPebUnlockRoutine; // 24h</p>
+<p>ULONG EnvironmentUpdateCount; // 28h</p>
+<p>PVOID* KernelCallbackTable; // 2Ch</p>
+<p>PVOID EventLogSection; // 30h</p>
+<p>PVOID EventLog; // 34h</p>
+<p>PPEB_FREE_BLOCK FreeList; // 38h</p>
+<p>ULONG TlsExpansionCounter; // 3Ch</p>
+<p>PVOID TlsBitmap; // 40h</p>
+<p>ULONG TlsBitmapBits[0x2]; // 44h</p>
+<p>PVOID ReadOnlySharedMemoryBase; // 4Ch</p>
+<p>PVOID ReadOnlySharedMemoryHeap; // 50h</p>
+<p>PVOID* ReadOnlyStaticServerData; // 54h</p>
+<p>PVOID AnsiCodePageData; // 58h</p>
+<p>PVOID OemCodePageData; // 5Ch</p>
+<p>PVOID UnicodeCaseTableData; // 60h</p>
+<p>ULONG NumberOfProcessors; // 64h</p>
+<p>ULONG NtGlobalFlag; // 68h</p>
+<p>UCHAR Spare2[0x4]; // 6Ch</p>
+<p>LARGE_INTEGER CriticalSectionTimeout; // 70h</p>
+<p>ULONG HeapSegmentReserve; // 78h</p>
+<p>ULONG HeapSegmentCommit; // 7Ch</p>
+<p>ULONG HeapDeCommitTotalFreeThreshold; // 80h</p>
+<p>ULONG HeapDeCommitFreeBlockThreshold; // 84h</p>
+<p>ULONG NumberOfHeaps; // 88h</p>
+<p>ULONG MaximumNumberOfHeaps; // 8Ch</p>
+<p>PVOID** ProcessHeaps; // 90h</p>
+<p>PVOID GdiSharedHandleTable; // 94h</p>
+<p>PVOID ProcessStarterHelper; // 98h</p>
+<p>PVOID GdiDCAttributeList; // 9Ch</p>
+<p>PVOID LoaderLock; // A0h</p>
+<p>ULONG OSMajorVersion; // A4h</p>
+<p>ULONG OSMinorVersion; // A8h</p>
+<p>ULONG OSBuildNumber; // ACh</p>
+<p>ULONG OSPlatformId; // B0h</p>
+<p>ULONG ImageSubSystem; // B4h</p>
+<p>ULONG ImageSubSystemMajorVersion; // B8h</p>
+<p>ULONG ImageSubSystemMinorVersion; // C0h</p>
+<p>ULONG GdiHandleBuffer[0x22]; // C4h</p>
+<p>PVOID ProcessWindowStation; // ???</p>
+<p>} PEB, *PPEB;</p>
+</blockquote>
+  </div>
+</article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:jupmouse@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/M-ouse" class="iconfont icon-github" title="github"></a>
+  <a href="https://m-ouse.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2021
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">2st</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-138883536-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Windows关闭PE文件的ASLR功能  - Exploit The Day</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="2st" /><meta name="description" content="NULL" /><meta name="keywords" content="Mac, Github, Vue, React, Front End" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.72.0 with theme even" />
+
+
+<link rel="canonical" href="https://m-ouse.github.io/post-%E5%89%AF%E6%9C%AC/Windows%E5%85%B3%E9%97%ADPE%E6%96%87%E4%BB%B6%E5%9C%B0%E5%9D%80%E9%9A%8F%E6%9C%BA%E5%8C%96/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<link href="/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/reset-even.css">
+
+
+<meta property="og:title" content="Windows关闭PE文件的ASLR功能 " />
+<meta property="og:description" content="NULL" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://m-ouse.github.io/post-%E5%89%AF%E6%9C%AC/Windows%E5%85%B3%E9%97%ADPE%E6%96%87%E4%BB%B6%E5%9C%B0%E5%9D%80%E9%9A%8F%E6%9C%BA%E5%8C%96/" />
+<meta property="article:published_time" content="2019-11-02T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-11-02T00:00:00+00:00" />
+<meta itemprop="name" content="Windows关闭PE文件的ASLR功能 ">
+<meta itemprop="description" content="NULL">
+<meta itemprop="datePublished" content="2019-11-02T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2019-11-02T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="736">
+
+
+
+<meta itemprop="keywords" content="reverse," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Windows关闭PE文件的ASLR功能 "/>
+<meta name="twitter:description" content="NULL"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Exploit The Day</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a><a href="/friends/">
+        <li class="mobile-menu-item">Friends</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Exploit The Day</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/friends/">Friends</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <div class="post-content">
+    <h2 id="0x1-aslraddress-space-layout-randomization">0x1 ASLR(Address Space Layout Randomization)</h2>
+<p>借助AELR技术，PE文件每次加载到内存的起始地址都会随机化并且每次运行时相应进程的栈以及堆的起始地址都会变化。简单地说就是EXE文件运行时加载到到进程内存的实际地址不同。因为增加了Windows的安全性，也增加了逆向分析的难度，因此删除ASLR功能可以为PE文件的逆向工作减轻负担。</p>
+<h2 id="0x2-删除aslr功能">0x2 删除ASLR功能</h2>
+<h3 id="0x21-利用visual-studio创建文件">0x2.1 利用Visual Studio创建文件</h3>
+<p>Visual Studio编译文件默认应用ASLR技术，可以在工程Properties-Linker-Advanced-Randomized Base Address中打开或关闭。
+<img src="http://23.91.100.118:8080/images/2019/11/01/generate_file.png" alt="Generate"></p>
+<p>下图分别是调试开启ASLR和禁用ASLR功能的EXE文件</p>
+<p><img src="http://23.91.100.118:8080/images/2019/11/01/aslr.png" alt="Debug ASLR"><br>
+<img src="http://23.91.100.118:8080/images/2019/11/01/aslr_no.png" alt="Debug ASLR_no"></p>
+<h3 id="0x22-节区信息">0x2.2 节区信息</h3>
+<p>采用ASLR技术会比非采用ASLR技术的PE文件节区中多出.reloc节区，如图<br>
+<img src="http://23.91.100.118:8080/images/2019/11/01/reloc_info.png" alt="">
+开启了ASLR功能的PE文件，当被加载到内存的时候，该节区被用作重定位的参考，但它不是EXE文件运行的必须部分，因此可将其从EXE文件中删除，但由于DLL文件总是需要重定位，所以在DLL文件中不可将其删除。<br>
+<strong>最重要的是部分是IMAGE_FILE_HEADER\Characteristics与IMAGE_OPTIONAL_HEADER\DLL Characteristics这2个字段</strong><br>
+<img src="http://23.91.100.118:8080/images/2019/11/01/header_info.png" alt=""></p>
+<h3 id="0x23-删除aslr功能">0x2.3 删除ASLR功能</h3>
+<p>使用HxD工具修改ASLR.exe文件，来删除ASLR功能，从上图中可看到IMAGE_OPTIONAL_HEADER\DLL Characteristics中设有IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE(40)标志，删除它即可删除ASLR功能。使用HxD将DLL属性值由8140改为8100(位于偏移146处的DWORD值)<br>
+<img src="http://23.91.100.118:8080/images/2019/11/01/patch_pre.png" alt="">
+<img src="http://23.91.100.118:8080/images/2019/11/01/2019-11-02_013311.png" alt=""></p>
+<p>保存后在调试器中运行，如下图<br>
+<img src="http://23.91.100.118:8080/images/2019/11/01/patched.png" alt="">
+可以看到，已经成功删除ASLR功能。</p>
+  </div>
+</article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:jupmouse@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/M-ouse" class="iconfont icon-github" title="github"></a>
+  <a href="https://m-ouse.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2021
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">2st</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-138883536-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>
