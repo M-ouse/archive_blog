@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Exploit The Day</title>
+  <title>pwn ret2libc system调用失败的一些问题 - Exploit The Day</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="2st" /><meta name="description" content="2st&#39;s Blog" /><meta name="keywords" content="Mac, Github, Vue, React, Front End" />
+<meta name="author" content="2st" /><meta name="description" content="NULL" /><meta name="keywords" content="Mac, Github, Vue, React, Front End" />
 
 
 
@@ -26,9 +26,7 @@
 <meta name="generator" content="Hugo 0.72.0 with theme even" />
 
 
-<link rel="canonical" href="https://m-ouse.github.io/" />
-  <link href="https://m-ouse.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Exploit The Day" />
-  <link href="https://m-ouse.github.io/index.xml" rel="feed" type="application/rss+xml" title="Exploit The Day" />
+<link rel="canonical" href="https://m-ouse.github.io/post/pwn-ret2libc-system%E8%B0%83%E7%94%A8%E5%A4%B1%E8%B4%A5%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -42,15 +40,23 @@
 <link rel="stylesheet" href="/css/reset-even.css">
 
 
-<meta property="og:title" content="Exploit The Day" />
-<meta property="og:description" content="2st&#39;s Blog" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://m-ouse.github.io/" />
-<meta property="og:updated_time" content="2021-04-21T00:00:00+00:00" />
-<meta itemprop="name" content="Exploit The Day">
-<meta itemprop="description" content="2st&#39;s Blog"><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Exploit The Day"/>
-<meta name="twitter:description" content="2st&#39;s Blog"/>
+<meta property="og:title" content="pwn ret2libc system调用失败的一些问题" />
+<meta property="og:description" content="NULL" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://m-ouse.github.io/post/pwn-ret2libc-system%E8%B0%83%E7%94%A8%E5%A4%B1%E8%B4%A5%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/" />
+<meta property="article:published_time" content="2021-04-21T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-04-21T00:00:00+00:00" />
+<meta itemprop="name" content="pwn ret2libc system调用失败的一些问题">
+<meta itemprop="description" content="NULL">
+<meta itemprop="datePublished" content="2021-04-21T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2021-04-21T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="315">
+
+
+
+<meta itemprop="keywords" content="rop,ret2libc," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="pwn ret2libc system调用失败的一些问题"/>
+<meta name="twitter:description" content="NULL"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -118,126 +124,79 @@
     <main id="main" class="main">
       <div class="content-wrapper">
         <div id="content" class="content">
-          <section id="posts" class="posts">
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/dll%E6%B3%A8%E5%85%A5/">dll注入</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2020-02-08 00:00 </span>
-      <div class="post-category">
-          <a href="/categories/Windows/"> Windows </a>
-          </div>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p>dll注入</p>
-    </div>
-    <div class="read-more">
-      <a href="/post/dll%E6%B3%A8%E5%85%A5/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">pwn ret2libc system调用失败的一些问题</h1>
 
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/cisc_2019_c_1/">cisc_2019_c_1</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2020-02-07 00:00 </span>
-      <div class="post-category">
-          <a href="/categories/pwn/"> pwn </a>
-          </div>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p>入门Pwn的一道题，利用了构造ROP链和泄露libc地址getshell，对于新手来说比较全面，简单记录一下</p>
-    </div>
-    <div class="read-more">
-      <a href="/post/cisc_2019_c_1/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
+      <div class="post-meta">
+        <span class="post-time"> 2021-04-21 00:00 </span>
+        <div class="post-category">
+            <a href="/categories/pwn/"> pwn </a>
+            </div>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
 
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/C&#43;&#43;%E8%B0%83%E7%94%A8dll/">C&#43;&#43;调用dll</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2020-02-06 00:00 </span>
-      <div class="post-category">
-          <a href="/categories/Windows/"> Windows </a>
-          </div>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p>使用C++调用dll，方便调试</p>
-    </div>
-    <div class="read-more">
-      <a href="/post/C&#43;&#43;%E8%B0%83%E7%94%A8dll/" class="read-more-link">阅读更多</a>
-    </div>
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents"></nav>
   </div>
-</article>
+</div>
+    <div class="post-content">
+      <p>在完成软件安全的课程作业bonus时想用ret2libc完成getshell操作，但本地调用system却失败，错误显示segment fault；跟进libc中的do_system函数调试发现，是指令<code>movaps xmmword ptr [rsp+0x50],xmm0</code>出的问题，经过网上查阅资料，该指令（movaps）需要<code>rsp</code>按照16字节对齐，然而我的第一次exploit执行到该条指令rsp以8结尾，所以最后程序直接crash掉。</p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/pwn/stack%20alignment1.png?raw=true" alt=""></p>
+<p>那么解决方案有两个：</p>
+<ul>
+<li>把栈迁移到堆上，可以自由布局</li>
+<li>调整参数数量，进行适量填充保证执行到movaps这条语句的时候<code>rsp</code>以0结尾</li>
+</ul>
+<p>老师留的题I/O有限，所以我选择了第二种方法，增加了一些padding</p>
+<p>最后getshell成功</p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/pwn/stack%20alignment2.png?raw=true" alt=""></p>
+<p><img src="https://github.com/M-ouse/pic/blob/main/blog/pwn/stack%20alignment3.png?raw=true" alt=""></p>
+    </div>
 
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/CTF%E4%B8%AD%E5%85%B3%E4%BA%8EPwn%E7%B1%BB%E5%9E%8B%E9%A2%98%E7%9B%AE%E5%8A%A0%E8%BD%BD%E7%9B%AE%E6%A0%87libc%E7%9A%84%E6%96%B9%E6%B3%95/">CTF中关于Pwn类型题目加载目标libc的方法</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2020-02-06 00:00 </span>
-      <div class="post-category">
-          <a href="/categories/pwn/"> pwn </a>
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">2st</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-04-21 00:00
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a target="_blank" rel="license noopener" href="https://github.com/nusr/blog/blob/master/LICENSE">MIT</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/rop/">rop</a>
+          <a href="/tags/ret2libc/">ret2libc</a>
           </div>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p>做pwn有的时候需要加载题目给的libc让程序跑，不然payload是对的远程依旧打不穿</p>
-    </div>
-    <div class="read-more">
-      <a href="/post/CTF%E4%B8%AD%E5%85%B3%E4%BA%8EPwn%E7%B1%BB%E5%9E%8B%E9%A2%98%E7%9B%AE%E5%8A%A0%E8%BD%BD%E7%9B%AE%E6%A0%87libc%E7%9A%84%E6%96%B9%E6%B3%95/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/RC4-C&#43;&#43;-cover/">RC4-C&#43;&#43; cover</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2020-02-04 00:00 </span>
-      <div class="post-category">
-          <a href="/categories/Algorithm/"> Algorithm </a>
-          </div>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      
-    </div>
-    <div class="read-more">
-      <a href="/post/RC4-C&#43;&#43;-cover/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    </section>
-  
-  <nav class="pagination">
-    <a class="prev" href="/page/4/">
-        <i class="iconfont icon-left"></i>
-        <span class="prev-text">上一页</span>
-      </a>
-    <a class="next" href="/page/6/">
-        <span class="next-text">下一页</span>
-        <i class="iconfont icon-right"></i>
-      </a>
-  </nav>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/%E7%8E%84%E6%AD%A6%E5%AE%9E%E4%B9%A00/">
+            <span class="next-text nav-default">玄武实验室实习</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
         </div>
         
+
+  
+
+  
 
       </div>
     </main>

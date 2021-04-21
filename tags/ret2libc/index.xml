@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>rop on Exploit The Day</title>
-    <link>https://m-ouse.github.io/tags/rop/</link>
-    <description>Recent content in rop on Exploit The Day</description>
+    <title>ret2libc on Exploit The Day</title>
+    <link>https://m-ouse.github.io/tags/ret2libc/</link>
+    <description>Recent content in ret2libc on Exploit The Day</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <lastBuildDate>Wed, 21 Apr 2021 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://m-ouse.github.io/tags/rop/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://m-ouse.github.io/tags/ret2libc/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -18,15 +18,6 @@
       
       <guid>https://m-ouse.github.io/post/pwn-ret2libc-system%E8%B0%83%E7%94%A8%E5%A4%B1%E8%B4%A5%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/</guid>
       <description></description>
-    </item>
-    
-    <item>
-      <title>cisc_2019_c_1</title>
-      <link>https://m-ouse.github.io/post/cisc_2019_c_1/</link>
-      <pubDate>Fri, 07 Feb 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://m-ouse.github.io/post/cisc_2019_c_1/</guid>
-      <description>&lt;p&gt;入门Pwn的一道题，利用了构造ROP链和泄露libc地址getshell，对于新手来说比较全面，简单记录一下&lt;/p&gt;</description>
     </item>
     
   </channel>

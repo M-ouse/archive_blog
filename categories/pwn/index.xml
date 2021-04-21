@@ -6,10 +6,19 @@
     <description>Recent content in pwn on Exploit The Day</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 17 Jun 2020 10:51:33 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 21 Apr 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://m-ouse.github.io/categories/pwn/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>pwn ret2libc system调用失败的一些问题</title>
+      <link>https://m-ouse.github.io/post/pwn-ret2libc-system%E8%B0%83%E7%94%A8%E5%A4%B1%E8%B4%A5%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Wed, 21 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://m-ouse.github.io/post/pwn-ret2libc-system%E8%B0%83%E7%94%A8%E5%A4%B1%E8%B4%A5%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Windows Kernel Exploit 3-PoolOverflow</title>
